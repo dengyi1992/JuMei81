@@ -57,13 +57,12 @@ app.use(function (err, req, res, next) {
     });
 });
 
-var Iconv = require('iconv').Iconv;//用于乱码解决
-var iconv = new Iconv('GBK', 'UTF-8');
-var time = new Date().getTime();
-time += 1000;
-var date = new Date(time);
-console.log(date.toLocaleString());
-console.log(new Date().toLocaleString());
+
+// var time = new Date().getTime();
+// time += 1000;
+// var date = new Date(time);
+// console.log(date.toLocaleString());
+// console.log(new Date().toLocaleString());
 var schedule = require('node-schedule');
 
 
@@ -86,17 +85,15 @@ myEvent.on("addCart",function(items){
     request(options,function(error, response, body){
         if (!error && response.statusCode == 200) {
             //var info = JSON.parse(body);
-            var result = iconv.convert(new Buffer(body, 'binary')).toString();
-            console.log(result);
+            console.log(body);
         }
     });
 });
 var items=[];
-items.push("df2850194067698465,df160725p2850194,1");
-items.push("df2850214067952347,df160725p2850214,1");
-items.push("df2850214144756607,df160725p2850214,1");
-items.push("df2854840040353127,df160727p2854840,1");
-items.push("df2854823028061956,df160727p2854823,1");
+items.push("df2856829095061221,df160728p2856829,1");
+items.push("df2856828052986038,df160728p2856828,1");
+items.push("df2854829060345587,df160727p2854829,1");
+
 
 //for(var i=0;i<items.length;i++){
 //    setTimeout(function(){
@@ -108,21 +105,17 @@ var sec=[];
 for(var i=0;i<60;i++){
     sec.push(i);
 }
-rule.second=sec;
+console.log(new Date().toLocaleString());
+// rule.second=sec;
 var count=0;
-schedule.scheduleJob(rule, function () {
-    if(count>items.length-1){
-        this.cancel();
-    }
-    myEvent.emit("addCart",items[count++])
+
+var date2 = new Date("Fri Jul 30 2016 09:59:59 GMT+0800 (CST)");
+var j = schedule.scheduleJob(date2, function () {
+    schedule.scheduleJob(rule, function () {
+        if(count>items.length-1){
+            this.cancel();
+        }
+        myEvent.emit("addCart",items[count++])
+    });
 });
-//var date2 = new Date("Fri Jul 29 2016 21:57:00 GMT+0800 (CST)");
-//var j = schedule.scheduleJob(date2, function () {
-//    console.log(new Date().toISOString());
-//    console.log('The world is going to end today.');
-//    var items="df2850194067698465,df160725p2850194,1";
-//    for(var i=0;i<2;i++){
-//        myEvent.emit("addCart",items)
-//    }
-//});
 module.exports = app;
